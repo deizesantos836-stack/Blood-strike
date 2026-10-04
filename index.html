@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strike Panel - Treino</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #24314f 0%, #0b0e17 45%, #05060a 100%);
+      color: #fff;
+      padding: 18px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      margin: auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .header p {
+      color: #9da7bd;
+      margin-top: 5px;
+      font-size: 13px;
+    }
+
+    .panel {
+      background: rgba(16, 20, 32, .94);
+      border: 1px solid #30394f;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 15px 45px rgba(0,0,0,.45);
+      margin-bottom: 15px;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      background: #37e68b;
+      border-radius: 50%;
+      box-shadow: 0 0 12px #37e68b;
+    }
+
+    .status span {
+      color: #37e68b;
+      font-weight: bold;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .card {
+      background: #0c101b;
+      border: 1px solid #252d40;
+      border-radius: 14px;
+      padding: 15px;
+    }
+
+    .card small {
+      display: block;
+      color: #8994aa;
+      margin-bottom: 7px;
+    }
+
+    .value {
+      font-size: 23px;
+      font-weight: bold;
+    }
+
+    h2 {
+      font-size: 17px;
+      margin-bottom: 15px;
+    }
+
+    .control {
+      margin-bottom: 18px;
+    }
+
+    .control:last-child {
+      margin-bottom: 0;
+    }
+
+    .control label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      color: #c9d0df;
+      font-size: 14px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #4d8dff;
+    }
+
+    .switch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 0;
+      border-bottom: 1px solid #252d40;
+    }
+
+    .switch-row:last-child {
+      border-bottom: 0;
+    }
+
+    .switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      background: #30394b;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: .25s;
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 3px;
+      top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: .25s;
+    }
+
+    .switch input:checked + .slider {
+      background: #377dff;
+    }
+
+    .switch input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      padding: 14px;
+      background: #377dff;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    button:active {
+      transform: scale(.98);
+    }
+
+    .secondary {
+      background: #20283a;
+    }
+
+    .message {
+      text-align: center;
+      color: #8f9bb0;
+      font-size: 12px;
+      margin-top: 13px;
+      min-height: 16px;
+    }
+
+    .footer {
+      text-align: center;
+      color: #68748a;
+      font-size: 11px;
+      margin-top: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>STRIKE PANEL</h1>
+    <p>Painel de treino e configuração</p>
+  </div>
+
+  <div class="panel">
+
+    <div class="status">
+      <div class="dot"></div>
+      <span>PAINEL ONLINE</span>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <small>Precisão</small>
+        <div class="value" id="accuracy">87%</div>
+      </div>
+
+      <div class="card">
+        <small>K/D treino</small>
+        <div class="value" id="kd">2.8</div>
+      </div>
+
+      <div class="card">
+        <small>Headshots</small>
+        <div class="value" id="headshots">64%</div>
+      </div>
+
+      <div class="card">
+        <small>Partidas</small>
+        <div class="value" id="matches">128</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="panel">
+
+    <h2>🎯 Sensibilidade de treino</h2>
+
+    <div class="control">
+      <label>
+        <span>Geral</span>
+        <strong id="geralValue">80</strong>
+      </label>
+      <input id="geral" type="range" min="0" max="100" value="80">
+    </div>
+
+    <div class="control">
+      <label>
+        <span>Mira</span>
+        <strong id="miraValue">72</strong>
+      </label>
+      <input id="mira" type="range" min="0" max="100" value="72">
+    </div>
+
+    <div class="control">
+      <label>
+        <span>ADS</span>
+        <strong id="adsValue">65</strong>
+      </label>
+      <input id="ads" type="range" min="0" max="100" value="65">
+    </div>
+
+    <div class="control">
+      <label>
+        <span>Sniper</span>
+        <strong id="sniperValue">45</strong>
+      </label>
+      <input id="sniper" type="range" min="0" max="100" value="45">
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <h2>⚙️ Assistente de treino</h2>
+
+    <div class="switch-row">
+      <span>Modo prática</span>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="switch-row">
+      <span>Contador de headshots</span>
+      <label class="switch">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="switch-row">
+      <span>Treino de reflexo</span>
+      <label class="switch">
+        <input type="checkbox">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="switch-row">
+      <span>HUD compacto</span>
+      <label class="switch">
+        <input type="checkbox">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <h2>📊 Sessão</h2>
+
+    <button onclick="novaSessao()">
+      INICIAR TREINO
+    </button>
+
+    <button class="secondary" onclick="resetar()">
+      RESTAURAR CONFIGURAÇÕES
+    </button>
+
+    <div class="message" id="message"></div>
+
+  </div>
+
+  <div class="footer">
+    Painel independente • Apenas treinamento e interface
+  </div>
+
+</div>
+
+<script>
+
+  const controles = [
+    ["geral", "geralValue"],
+    ["mira", "miraValue"],
+    ["ads", "adsValue"],
+    ["sniper", "sniperValue"]
+  ];
+
+  controles.forEach(([inputId, valueId]) => {
+
+    const input = document.getElementById(inputId);
+    const value = document.getElementById(valueId);
+
+    input.addEventListener("input", () => {
+      value.textContent = input.value;
+    });
+
+  });
+
+  function novaSessao() {
+
+    const accuracy =
+      Math.floor(Math.random() * 16) + 80;
+
+    const kd =
+      (Math.random() * 1.8 + 1.8).toFixed(1);
+
+    const headshots =
+      Math.floor(Math.random() * 15) + 55;
+
+    document.getElementById("accuracy").textContent =
+      accuracy + "%";
+
+    document.getElementById("kd").textContent =
+      kd;
+
+    document.getElementById("headshots").textContent =
+      headshots + "%";
+
+    document.getElementById("matches").textContent =
+      Math.floor(Math.random() * 30) + 130;
+
+    document.getElementById("message").textContent =
+      "Sessão de treino iniciada!";
+  }
+
+  function resetar() {
+
+    document.getElementById("geral").value = 80;
+    document.getElementById("mira").value = 72;
+    document.getElementById("ads").value = 65;
+    document.getElementById("sniper").value = 45;
+
+    document.getElementById("geralValue").textContent = 80;
+    document.getElementById("miraValue").textContent = 72;
+    document.getElementById("adsValue").textContent = 65;
+    document.getElementById("sniperValue").textContent = 45;
+
+    document.getElementById("message").textContent =
+      "Configurações restauradas.";
+  }
+
+</script>
+
+</body>
+</html>
